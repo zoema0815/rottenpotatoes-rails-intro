@@ -20,6 +20,26 @@ class MoviesController < ApplicationController
 
     # highlight titles of movie and release date
     @title_header = 'text-primary'
+    @release_date_header = 'text-primary'
+    # check: click on movie tile or release date?
+    if params.has_key? (:sort_name)
+      @hl_choose = params[:sort_name]
+    else
+      @hl_choose = ''
+    end
+
+    # implementation
+    if @hl_choose = 'title'
+      @title_header = 'hilite text-primary'
+      @release_date_header = 'text-primary'
+    elsif @hl_choose = 'release_date'
+      @title_header = 'text-primary'
+      @release_date_header = 'hilite text-primary'
+    else
+      @title_header = 'text-primary'
+      @release_date_header = 'text-primary'
+    end
+
   end
 
   def new
