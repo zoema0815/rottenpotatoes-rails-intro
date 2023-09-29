@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
       @ratings_to_show = params[:ratings].map{|rating| rating.upcase}
     else
       @ratings_to_show = @all_ratings
-    
+    end
     
   end
 
