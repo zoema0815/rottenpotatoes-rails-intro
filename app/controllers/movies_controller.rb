@@ -15,7 +15,8 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = params[:ratings].keys.map{|rating| rating.upcase}
     end
-    
+    # hash table for memorizing sort and filter
+    @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
     @movies = Movie.with_ratings(@ratings_to_show)
 
     # highlight titles of movie and release date
