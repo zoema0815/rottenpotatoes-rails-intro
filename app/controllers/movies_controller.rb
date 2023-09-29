@@ -10,6 +10,7 @@ class MoviesController < ApplicationController
 
     @all_ratings = Movie.all_ratings
     
+    
     if params[:ratings].nil?
       @ratings_to_show = @all_ratings
     else
@@ -19,29 +20,16 @@ class MoviesController < ApplicationController
     @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
     @movies = Movie.with_ratings(@ratings_to_show)
 
-    # highlight titles of movie and release date
-    # @title_header = 'text-primary'
-    # @release_date_header = 'text-primary'
-    need_dir = false
+
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
-      session[:sort_name] = params[:sort_name]  #memorize the choice
     elsif session.has_key? (:sort_name)
       @hl_choose = session[:sort_name]
-      need_dir = true
     else
       @hl_choose = ''
     end
-    # check previous filtering
-    if params.has_key? (:ratings)
-      session[:ratings] = params[:ratings]
-      @hash_ratings_to_show = params[:ratings]
-    elsif session.has_key? (:ratings)
-      @hash_ratings_to_show = session[:ratings]
-      need_dir = true
-    end
-
+ 
     # implementation
     if @hl_choose == 'title'
 
@@ -58,11 +46,6 @@ class MoviesController < ApplicationController
     else
       @title_header = 'text-primary'
       @release_date_header = 'text-primary'
-    end
-
-    # redirect to new movie
-    if need_dir
-      redirect_to movies_path(:ratings => @hash_ratings_to_show, :to_sort => @hl_choose)
     end
 
   end
