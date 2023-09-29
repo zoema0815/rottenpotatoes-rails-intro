@@ -62,7 +62,7 @@ class MoviesController < ApplicationController
 
     # redirect to new movie
     if need_dir
-      redirect_to movie_path(:ratings => @hash_ratings_to_show, :sort_name => @hl_choose)
+      redirect_to movies_path(:ratings => @hash_ratings_to_show, :to_sort => @hl_choose)
     end
 
   end
