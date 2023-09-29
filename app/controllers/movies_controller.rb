@@ -11,11 +11,10 @@ class MoviesController < ApplicationController
 
     @all_ratings = Movie.all_ratings
     
-    if !params[:ratings].nil?
-      show_list = params[:ratings].keys.map{|rating| rating.upcase}
-      @ratings_to_show = show_list
-    else
+    if params[:ratings].nil?
       @ratings_to_show = @all_ratings
+    else
+      @ratings_to_show = params[:ratings].keys.map{|rating| rating.upcase}
     end
     
   end
