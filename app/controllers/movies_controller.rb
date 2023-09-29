@@ -33,11 +33,13 @@ class MoviesController < ApplicationController
 
       @title_header = 'hilite bg-warning'
       @release_date_header = 'text-primary'
+      @movies = @movies.order(:title)
 
     elsif @hl_choose == 'release_date'
 
       @title_header = 'text-primary'
       @release_date_header = 'hilite bg-warning'
+      @movies = @movies.order(:release_date)
 
     else
       @title_header = 'text-primary'
