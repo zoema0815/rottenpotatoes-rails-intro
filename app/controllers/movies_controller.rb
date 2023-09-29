@@ -19,8 +19,8 @@ class MoviesController < ApplicationController
     @movies = Movie.with_ratings(@ratings_to_show)
 
     # highlight titles of movie and release date
-    @title_header = 'text-primary'
-    @release_date_header = 'text-primary'
+    # @title_header = 'text-primary'
+    # @release_date_header = 'text-primary'
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
@@ -35,7 +35,7 @@ class MoviesController < ApplicationController
       @release_date_header = 'text-primary'
 
     elsif @hl_choose == 'release_date'
-      
+
       @title_header = 'text-primary'
       @release_date_header = 'hilite text-primary'
 
