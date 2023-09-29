@@ -31,13 +31,13 @@ class MoviesController < ApplicationController
     # implementation
     if @hl_choose == 'title'
 
-      @title_header = 'hilite bg-warning' : ''
+      @title_header = 'hilite bg-warning'
       @release_date_header = 'text-primary'
 
     elsif @hl_choose == 'release_date'
 
       @title_header = 'text-primary'
-      @release_date_header = 'hilite bg-warning' : ''
+      @release_date_header = 'hilite bg-warning'
 
     else
       @title_header = 'text-primary'
