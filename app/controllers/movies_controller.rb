@@ -7,9 +7,10 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @movies = Movie.all
 
     @all_ratings = Movie.all_ratings
-    # @movies = Movie.all
+    
     if !params[:ratings].nil?
       @ratings_to_show = params[:ratings].map{|rating| rating.upcase}
     else
