@@ -10,19 +10,19 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     
     if !session.key?(:ratings) || !session.key?(:sort_name)
-      @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
+      @hash_ratings = Hash[@ratings_to_show.map{|key| [key, '1']}]
       if !session.key?(:ratings)
-        session[:ratings] = @hash_ratings_to_show
+        session[:ratings] = @hash_ratings
       end
       if !session.key?(:sort_name)
         session[:sort_name] = ''
       end
-      redirect_to movies_path(:ratings => @hash_ratings_to_show, :sort_by => '') and return
+      redirect_to movies_path(:ratings => @hash_ratings, :sort_by => '') and return
     end
     # retrieve memory
     if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
-      @hash_ratings_to_show = Hash[session[:ratings].map{|key| [key, '1']}]
-      redirect_to movies_path(:ratings => @hash_ratings_to_show, :sort_by => session[:sort_name]) and return
+      hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
+      redirect_to movies_path(:ratings => hash_ratings_to, :sort_by => session[:sort_name]) and return
     end
     
     if params[:ratings].nil?
