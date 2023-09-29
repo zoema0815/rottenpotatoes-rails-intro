@@ -22,11 +22,24 @@ class MoviesController < ApplicationController
     # highlight titles of movie and release date
     # @title_header = 'text-primary'
     # @release_date_header = 'text-primary'
+    need_dir = false
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
+      session[:sort_name] = params[:sort_name]  #memorize the choice
+    elsif session.has_key? (:sort_name)
+      @hl_choose = session[:sort_name]
+      need_dir = true
     else
       @hl_choose = ''
+    end
+    # check previous filtering
+    if params.has_key? (:ratings)
+      session[:ratings] = params[:ratings]
+      @hash_ratings_to_show = params[:ratings]
+    elsif session.has_key? (:ratings)
+      @hash_ratings_to_show = session[:ratings]
+      need_dir = true
     end
 
     # implementation
@@ -45,6 +58,11 @@ class MoviesController < ApplicationController
     else
       @title_header = 'text-primary'
       @release_date_header = 'text-primary'
+    end
+
+    # redirect to new movie
+    if need_dir
+      redirect_to movie_path(:ratings => @hash_ratings_to_show, :sort_name => @hl_choose)
     end
 
   end
