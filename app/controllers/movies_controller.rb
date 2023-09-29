@@ -17,12 +17,12 @@ class MoviesController < ApplicationController
       if !session.key?(:sort_name)
         session[:sort_name] = ''
       end
-      redirect_to movies_path(:ratings => @hash_ratings, :sort_by => '') and return
+      redirect_to movies_path(:ratings => @hash_ratings, :sort_by => '')
     end
     # retrieve memory
     if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
       hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
-      redirect_to movies_path(:ratings => hash_ratings_to, :sort_by => session[:sort_name]) and return
+      redirect_to movies_path(:ratings => hash_ratings_to, :sort_by => session[:sort_name])
     end
     
     if params[:ratings].nil?
