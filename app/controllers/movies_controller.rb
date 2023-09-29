@@ -17,6 +17,9 @@ class MoviesController < ApplicationController
     end
     
     @movies = Movie.with_ratings(@ratings_to_show)
+
+    # highlight titles of movie and release date
+    @title_header = 'text-primary'
   end
 
   def new
