@@ -37,10 +37,10 @@ class MoviesController < ApplicationController
       @ratings_to_show = @all_ratings
     else
       @ratings_to_show = params[:ratings].keys.map{|rating| rating.upcase}
-      session[:ratings] = params[:ratings]
     end
     # hash table for memorizing sort and filter
     @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
+    session[:ratings] = @hash_ratings_to_show
     @movies = Movie.with_ratings(@ratings_to_show)
 
 
