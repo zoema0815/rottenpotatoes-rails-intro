@@ -8,12 +8,8 @@ class MoviesController < ApplicationController
 
   def index
 
-    # session[:ratings] = params[:ratings] if params[:ratings]
-    # session[:sort_name] = params[:sort_name] if params[:sort_name]
-
-    # if (!params[:ratings] && session[:ratings]) || (!params[:sort_name] && session[:sort_name])
-    #   redirect_to movies_path(:ratings => session[:ratings], 
-    # end
+    session[:ratings] = params[:ratings] if params[:ratings]
+    session[:sort_name] = params[:sort_name] if params[:sort_name]
 
     @all_ratings = Movie.all_ratings
     
@@ -40,14 +36,14 @@ class MoviesController < ApplicationController
     end
     # hash table for memorizing sort and filter
     @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
-    session[:ratings] = @hash_ratings_to_show
+
     @movies = Movie.with_ratings(@ratings_to_show)
 
 
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
-      session[:sort_name] = params[:sort_name]
+ 
     else
       @hl_choose = ''
     end
