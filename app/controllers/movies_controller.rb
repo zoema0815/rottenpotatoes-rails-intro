@@ -8,31 +8,36 @@ class MoviesController < ApplicationController
 
   def index
 
-    session[:ratings] = params[:ratings] if params[:ratings]
-    session[:sort_name] = params[:sort_name] if params[:sort_name]
+    # session[:ratings] = params[:ratings] if params[:ratings]
+    # session[:sort_name] = params[:sort_name] if params[:sort_name]
+
+    # if (!params[:ratings] && session[:ratings]) || (!params[:sort_name] && session[:sort_name])
+    #   redirect_to movies_path(:ratings => session[:ratings], 
+    # end
 
     @all_ratings = Movie.all_ratings
     
-    # if !session.key?(:ratings) || !session.key?(:sort_name)
-    #   @hash_ratings = Hash[@ratings_to_show.map{|key| [key, '1']}]
-    #   if !session.key?(:ratings)
-    #     session[:ratings] = @hash_ratings
-    #   end
-    #   if !session.key?(:sort_name)
-    #     session[:sort_name] = ''
-    #   end
-    #   redirect_to movies_path(:ratings => @hash_ratings, :sort_by => '')
-    # end
-    # # retrieve memory
-    # if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
-    #   hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
-    #   redirect_to movies_path(:ratings => hash_ratings_to, :sort_by => session[:sort_name])
-    # end
+    if !session.key?(:ratings) || !session.key?(:sort_name)
+      @hash_ratings = Hash[@ratings_to_show.map{|key| [key, '1']}]
+      if !session.key?(:ratings)
+        session[:ratings] = @hash_ratings
+      end
+      if !session.key?(:sort_name)
+        session[:sort_name] = ''
+      end
+      redirect_to movies_path(:ratings => @hash_ratings, :sort_name => '')
+    end
+    # retrieve memory
+    if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
+      hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
+      redirect_to movies_path(:ratings => hash_ratings_to, :sort_name => session[:sort_name])
+    end
     
     if params[:ratings].nil?
       @ratings_to_show = @all_ratings
     else
       @ratings_to_show = params[:ratings].keys.map{|rating| rating.upcase}
+      session[:ratings] = params[:ratings]
     end
     # hash table for memorizing sort and filter
     @hash_ratings_to_show = Hash[@ratings_to_show.map{|key| [key, '1']}]
@@ -42,6 +47,7 @@ class MoviesController < ApplicationController
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
+      session[:sort_name] = params[:sort_name]
     else
       @hl_choose = ''
     end
