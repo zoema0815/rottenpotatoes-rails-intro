@@ -9,24 +9,24 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = Movie.all_ratings
     
-    if !session.key?(:ratings) || !session.key?(:sort_name)
-      @hash_ratings = Hash[@ratings_to_show.map{|key| [key, '1']}]
-      if !session.key?(:ratings)
-        session[:ratings] = @hash_ratings
-      end
-      if !session.key?(:sort_name)
-        session[:sort_name] = ''
-      end
-      redirect_to movies_path(:ratings => @hash_ratings, :sort_name => '') and return
-    end
-    # retrieve memory
-    if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
-      hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
-      redirect_to movies_path(:ratings => hash_ratings_to, :sort_name => session[:sort_name]) and return
-    end
+    # if !session.key?(:ratings) || !session.key?(:sort_name)
+    #   @hash_ratings = Hash[@ratings_to_show.map{|key| [key, '1']}]
+    #   if !session.key?(:ratings)
+    #     session[:ratings] = @hash_ratings
+    #   end
+    #   if !session.key?(:sort_name)
+    #     session[:sort_name] = ''
+    #   end
+    #   redirect_to movies_path(:ratings => @hash_ratings, :sort_name => '') and return
+    # end
+    # # retrieve memory
+    # if (!params.key?(:ratings) && session.key?(:ratings)) || (!params.key?(:sort_name) && session.key?(:sort_name))
+    #   hash_ratings_to = Hash[session[:ratings].map{|key| [key, '1']}]
+    #   redirect_to movies_path(:ratings => hash_ratings_to, :sort_name => session[:sort_name]) and return
+    # end
 
-    session[:ratings] = params[:ratings] if params[:ratings]
-    session[:sort_name] = params[:sort_name] if params[:sort_name]
+    # session[:ratings] = params[:ratings] if params[:ratings]
+    # session[:sort_name] = params[:sort_name] if params[:sort_name]
     
     if params[:ratings].nil?
       @ratings_to_show = @all_ratings
@@ -38,13 +38,24 @@ class MoviesController < ApplicationController
 
     @movies = Movie.with_ratings(@ratings_to_show)
 
-
+    need_redir = false
     # check: click on movie tile or release date?
     if params.has_key? (:sort_name)
       @hl_choose = params[:sort_name]
- 
+      session[:sort_name] = params[:sort_name]
+    elsif session.has_key? (:sort_name)
+      @hl_choose = session[:sort_name]
+      need_redir = true
     else
       @hl_choose = ''
+    end
+    # check filtering memory
+    if params.has_key? (:ratings)
+      @hash_ratings_to_show = params[:ratings]
+      session[:ratings] = params[:ratings]
+    elsif session.has_key? (:ratings)
+      @hash_ratings_to_show = session[:ratings]
+      need_redir = true
     end
  
     # implementation
@@ -63,6 +74,10 @@ class MoviesController < ApplicationController
     else
       @title_header = 'text-primary'
       @release_date_header = 'text-primary'
+    end
+
+    if need_redir
+      redirect_to movies_path(:ratings => @hash_ratings_to_show, :sort_name => @hl_choose)
     end
 
   end
